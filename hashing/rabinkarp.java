@@ -38,10 +38,32 @@ public class rabinkarp {
             }
         }
     }
-    public static void main(String[] args) {
+    public static String matchPattern(String text, String pattern) {
         rabinkarp rk = new rabinkarp();
+        int m = pattern.length();
+        int n = text.length();
+        long patternHash = rk.calculateHash(pattern);
+        long textHash = rk.calculateHash(text.substring(0, m));
+        StringBuilder result = new StringBuilder();
+        for(int i = 0; i <= n - m; i++){
+            if(patternHash == textHash){
+                if(text.substring(i, i + m).equals(pattern)){
+                    result.append("Pattern found at index: ").append(i).append("\n");
+                }
+            }
+            if(i < n - m){
+                textHash = rk.updateHash(textHash, text.charAt(i), text.charAt(i + m), m);
+            }
+        }
+        if(result.length() == 0) {
+            return "Pattern not found";
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
         String text = "RiteshKunalRahul";
         String pattern = "Rahul";
-        rk.search(text, pattern);
+        System.out.print(matchPattern(text, pattern));
     }
 }
